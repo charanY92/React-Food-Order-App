@@ -1,7 +1,7 @@
 import RestaurantCard from "./RestaurantCard";
 import restaurantList from "../utils/mockData";
-import { use, useEffect, useState } from "react";
-import { FOODFIRE_API_URL } from "../utils/constants";
+import { useEffect, useState } from "react";
+import { SWIGGY_API_URL } from "../utils/constants";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/useOnlineStatus";
@@ -21,9 +21,7 @@ const Body = () => {
   async function getRestaurants() {
     // handle the error using try... catch
     try {
-      const response = await fetch(
-        "https://www.swiggy.com/dapi/restaurants/list/v5?lat=17.4340684&lng=78.5021299&is-seo-homepage-enabled=true&page_type=DESKTOP_WEB_LISTING"
-      );
+      const response = await fetch(SWIGGY_API_URL);
       const json = await response.json();
       console.log(
         "json",
@@ -68,8 +66,8 @@ const Body = () => {
     <Shimmer />
   ) : (
     <div className="body">
-      <div className="filter">
-        <div className="serch">
+      <div className="filter flex">
+        <div className="p-4 m-4">
           <input
             type="text"
             placeholder="Search for restaurants..."
@@ -80,7 +78,7 @@ const Body = () => {
             }}
           />
           <button
-            className="search-btn"
+            className="bg-green-100 m-4 px-4 py-2 rounded-lg"
             onClick={() => {
               if (searchText === "") {
                 setFilteredRestaurants(listOfRestaurants);
@@ -98,12 +96,17 @@ const Body = () => {
             Search
           </button>
         </div>
-        <button className="filter-btn" onClick={filterTopRated}>
-          Top Rated Restaurants
-        </button>
+        <div className="p-4 m-4 flex items-center ">
+          <button
+            className="bg-gray-200 m-4 px-4 py-2 rounded-lg"
+            onClick={filterTopRated}
+          >
+            Top Rated Restaurants
+          </button>
+        </div>
       </div>
       <div className="outer-container">
-        <div className="res-container">
+        <div className="flex flex-wrap justify-center">
           {filteredRestaurants?.map((restaurant) => {
             return (
               <Link
